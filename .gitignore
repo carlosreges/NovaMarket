@@ -1,0 +1,33 @@
+# ===== Backend (Node.js / Express / PostgreSQL) =====
+backend/node_modules/
+backend/.env
+backend/.env.local
+backend/.env.production
+backend/dist/
+backend/*.log
+
+# ===== Frontend (React / Vite / HTML/CSS) =====
+frontend/node_modules/
+frontend/.env
+frontend/.env.local
+frontend/dist/
+frontend/build/
+frontend/.output/
+
+# ===== Logs y archivos temporales =====
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ===== IDE y editor =====
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# ===== Entorno local de desarrollo =====
+.env.local

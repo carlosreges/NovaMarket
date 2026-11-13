@@ -1,0 +1,543 @@
+{
+  "info": {
+    "name": "NovaMarket E-commerce Backend MVP",
+    "description": "Colección de Postman para probar la API del backend NovaMarket.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Autenticación",
+      "item": [
+        {
+          "name": "Registro de usuario",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Juan Pérez\",\n  \"email\": \"juan@test.com\",\n  \"password\": \"123456\",\n  \"gender\": \"Masculino\",\n  \"birth_date\": \"1990-05-20\",\n  \"province\": \"Buenos Aires\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "register"]
+            },
+            "description": "Registra un nuevo usuario cliente. Campos opcionales para KPIs demográficos: gender, birth_date, province."
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"cliente@novamarket.com\",\n  \"password\": \"cliente123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
+            },
+            "description": "Inicia sesión y devuelve un JWT. El token se guarda automáticamente en la variable {{token}} para usarse en endpoints protegidos.",
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "const jsonData = pm.response.json();",
+                    "if (jsonData.data && jsonData.data.token) {",
+                    "  pm.environment.set(\"token\", jsonData.data.token);",
+                    "  console.log('Token guardado:', jsonData.data.token);",
+                    "} else {",
+                    "  console.log('No se encontró token en la respuesta');",
+                    "}"
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "Datos del usuario autenticado (me)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/me",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "me"]
+            },
+            "description": "Obtiene los datos del usuario autenticado (requiere token JWT válido)."
+          }
+        },
+        {
+          "name": "Cierre de sesión (logout)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {},
+            "url": {
+              "raw": "{{base_url}}/api/auth/logout",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "logout"]
+            },
+            "description": "Cierre de sesión simulado. En JWT stateless el cliente simplemente elimina el token."
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Catálogo (Público)",
+      "item": [
+        {
+          "name": "Listar categorías",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/categories",
+              "host": ["{{base_url}}"],
+              "path": ["api", "categories"]
+            },
+            "description": "Lista todas las categorías de productos disponibles."
+          }
+        },
+        {
+          "name": "Listar productos",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/products?category=1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "products"],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "1",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Lista productos activos. Usa el query param ?category=ID para filtrar por categoría."
+          }
+        },
+        {
+          "name": "Detalle de producto",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/products/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "products", "1"]
+            },
+            "description": "Obtiene el detalle de un producto por su ID."
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Carrito (Requiere Auth)",
+      "item": [
+        {
+          "name": "Ver carrito activo",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/cart/items",
+              "host": ["{{base_url}}"],
+              "path": ["api", "cart", "items"]
+            },
+            "description": "Obtiene los ítems del carrito activo del usuario autenticado, con total calculado."
+          }
+        },
+        {
+          "name": "Agregar producto al carrito",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": 1,\n  \"quantity\": 2\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/cart/items",
+              "host": ["{{base_url}}"],
+              "path": ["api", "cart", "items"]
+            },
+            "description": "Agrega un producto al carrito activo del usuario. Si ya existe, aumenta la cantidad."
+          }
+        },
+        {
+          "name": "Modificar cantidad de ítem",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"quantity\": 3\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/cart/items/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "cart", "items", "1"]
+            },
+            "description": "Actualiza la cantidad de un ítem en el carrito. El :id es el product_id."
+          }
+        },
+        {
+          "name": "Quitar ítem del carrito",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/cart/items/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "cart", "items", "1"]
+            },
+            "description": "Elimina un ítem del carrito activo. El :id es el product_id."
+          }
+        },
+        {
+          "name": "Marcar carrito como abandonado",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/cart",
+              "host": ["{{base_url}}"],
+              "path": ["api", "cart"]
+            },
+            "description": "Marca el carrito activo del usuario como 'abandoned' (para KPI de tasa de abandono)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Checkout (Simulado)",
+      "item": [
+        {
+          "name": "Crear pedido (checkout simulado)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"items\": [\n    {\n      \"productId\": 1,\n      \"quantity\": 2,\n      \"price\": 15.99\n    },\n    {\n      \"productId\": 3,\n      \"quantity\": 1,\n      \"price\": 29.99\n    }\n  ],\n  \"total\": 61.97,\n  \"discount\": 0,\n  \"payment_method\": \"tarjeta_simulada\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/checkout",
+              "host": ["{{base_url}}"],
+              "path": ["api", "checkout"]
+            },
+            "description": "Confirma el pedido (simulado, sin pago real). Crea la orden, agrega los ítems y marca el carrito como convertido. Campos para KPIs: discount, payment_method."
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Órdenes",
+      "item": [
+        {
+          "name": "Mis órdenes (historial)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/orders",
+              "host": ["{{base_url}}"],
+              "path": ["api", "orders"]
+            },
+            "description": "Obtiene el historial de órdenes del usuario autenticado."
+          }
+        },
+        {
+          "name": "Detalle de una orden",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/orders/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "orders", "1"]
+            },
+            "description": "Obtiene el detalle de una orden específica con sus ítems."
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Admin (Requiere rol Admin)",
+      "item": [
+        {
+          "name": "Crear producto",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Monitor 27 pulgadas\",\n  \"description\": \"Monitor Full HD 144Hz\",\n  \"price\": 199.99,\n  \"stock\": 15,\n  \"category_id\": 2,\n  \"color\": \"Negro\",\n  \"brand\": \"LG\",\n  \"image_url\": \"https://via.placeholder.com/300x300?text=Monitor\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/admin/products",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "products"]
+            },
+            "description": "Crea un nuevo producto. Solo accesible por usuarios con rol admin. Campos para matriz de producto: color, brand."
+          }
+        },
+        {
+          "name": "Editar producto",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"price\": 179.99,\n  \"stock\": 20,\n  \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/admin/products/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "products", "1"]
+            },
+            "description": "Actualiza un producto existente. Solo accesible por usuarios admin."
+          }
+        },
+        {
+          "name": "Eliminar producto",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/admin/products/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "products", "1"]
+            },
+            "description": "Elimina un producto por su ID. Solo accesible por usuarios admin."
+          }
+        },
+        {
+          "name": "Ver todos los pedidos (admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/admin/orders",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "orders"]
+            },
+            "description": "Obtiene todas las órdenes del sistema. Solo accesible por usuarios admin. Útil para calcular KPI de ticket promedio."
+          }
+        },
+        {
+          "name": "Cambiar estado de orden (admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"completed\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/admin/orders/1/status",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "orders", "1", "status"]
+            },
+            "description": "Actualiza el estado de una orden (pending, completed, cancelled). Solo accesible por usuarios admin."
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Salud de la API",
+      "item": [
+        {
+          "name": "Health check",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/health",
+              "host": ["{{base_url}}"],
+              "path": ["api", "health"]
+            },
+            "description": "Verifica que el servidor backend esté corriendo."
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:3000", "type": "string" },
+    { "key": "token", "value": "", "type": "string" }
+  ]
+}
