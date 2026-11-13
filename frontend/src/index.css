@@ -1,0 +1,327 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Roboto, Arial, sans-serif;
+  background-color: #f3f5f8;
+  color: #303846;
+}
+
+#root {
+  min-height: 100vh;
+  width: 100%;
+}
+
+header {
+  background-color: #14213d;
+  padding: 20px 40px;
+}
+
+header nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+header h1 {
+  color: white;
+  font-size: 28px;
+}
+
+header nav div {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+header a {
+  color: white;
+  text-decoration: none;
+}
+
+header a:hover {
+  color: #93b4ff;
+}
+
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+@media (max-width: 600px) {
+  header {
+    padding: 20px;
+  }
+
+  header nav {
+    flex-direction: column;
+  }
+
+  header nav div {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+  }
+}
+
+.productos h2 {
+  margin-bottom: 12px;
+}
+
+.productos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px;
+  margin-top: 24px;
+}
+
+.product-card {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  border: 1px solid #e2e6ed;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.product-card h3 {
+  color: #14213d;
+}
+
+.product-card button {
+  background-color: #2864f0;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px;
+  cursor: pointer;
+  margin-top: auto;
+}
+
+.product-card button:disabled {
+  background-color: #a0a7b4;
+  cursor: not-allowed;
+}
+
+
+.filtros {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.filtros label {
+  font-weight: 500;
+}
+
+.filtros select {
+  padding: 10px 14px;
+  border: 1px solid #d0d5dd;
+  border-radius: 8px;
+  background-color: white;
+  color: #303846;
+  font-size: 16px;
+}
+
+.sin-resultados {
+  margin-top: 24px;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+}
+
+
+.buscador {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 400px;
+  margin-top: 24px;
+}
+
+.buscador input {
+  padding: 12px;
+  border: 1px solid #d0d5dd;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.buscador input:focus {
+  outline: 2px solid #2864f0;
+  outline-offset: 2px;
+}
+.ver-detalle {
+  display: block;
+  padding: 10px 14px;
+  border: 1px solid #2864f0;
+  border-radius: 8px;
+  color: #2864f0;
+  text-align: center;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.ver-detalle:hover {
+  background-color: #eef3ff;
+}
+
+
+/* ========================================
+   IDENTIDAD VISUAL OFICIAL - NOVAMARKET
+======================================== */
+
+:root {
+  --color-primary: #4338ca;
+  --color-secondary: #0e7490;
+  --color-accent: #f59e0b;
+  --color-neutral: #1f2937;
+  --color-background: #f3f4f6;
+  --color-text: #111827;
+}
+
+/* Tipografías */
+body {
+  font-family: "Inter", Arial, sans-serif;
+  background-color: var(--color-background);
+  color: var(--color-text);
+}
+
+h1,
+h2,
+h3 {
+  font-family: "Space Grotesk", sans-serif;
+}
+
+/* Navegación */
+header {
+  background-color: var(--color-neutral);
+}
+
+header a:hover {
+  color: var(--color-accent);
+}
+
+/* Productos */
+.product-card h3 {
+  color: var(--color-neutral);
+}
+
+.product-card button {
+  background-color: var(--color-primary);
+}
+
+.product-card button:hover:not(:disabled) {
+  background-color: #3730a3;
+}
+
+/* Buscador */
+.buscador input:focus {
+  outline-color: var(--color-primary);
+}
+
+/* Enlaces de detalle */
+.ver-detalle {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.ver-detalle:hover {
+  background-color: #eef2ff;
+}
+
+/* HOME - NOVAMARKET */
+
+.home {
+  background: linear-gradient(135deg, #4338ca, #312e81);
+  color: white;
+  padding: 80px 40px;
+  border-radius: 20px;
+  min-height: 350px;
+  display: flex;
+  align-items: center;
+}
+
+.home-contenido {
+  max-width: 650px;
+}
+
+.home h1 {
+  font-size: clamp(32px, 5vw, 48px);
+  line-height: 1.2;
+  margin-bottom: 20px;
+}
+
+.home p {
+  font-size: 18px;
+  line-height: 1.7;
+  margin-bottom: 28px;
+}
+
+.home-boton {
+  display: inline-block;
+  background-color: white;
+  color: #4338ca;
+  padding: 14px 24px;
+  border-radius: 10px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.home-boton:hover {
+  background-color: #eef2ff;
+}
+
+.home-boton:focus-visible {
+  outline: 3px solid #f59e0b;
+  outline-offset: 3px;
+}
+
+/* Adaptación para celulares */
+
+@media (max-width: 600px) {
+  .home {
+    padding: 48px 24px;
+    min-height: 300px;
+  }
+
+  .home p {
+    font-size: 16px;
+  }
+}
+
+
+/* Acciones de las tarjetas de productos */
+
+.product-card-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: auto;
+}
+
+.product-card-actions .ver-detalle {
+  width: 100%;
+}
+
+.product-card-actions button {
+  width: 100%;
+  margin-top: 0;
+}
+
+.product-card {
+  transition: box-shadow 0.2s ease;
+}
+
+.product-card:hover {
+  box-shadow: 0 8px 24px rgba(17, 24, 39, 0.1);
+}
