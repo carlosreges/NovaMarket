@@ -12,10 +12,9 @@ function Checkout() {
     phone: "",
   });
 
-  const [datosValidados, setDatosValidados] =
-    useState(false);
-
-    const [error, setError] = useState("");
+  const [errores, setErrores] = useState({});
+  const [errorGeneral, setErrorGeneral] = useState("");
+  const [datosValidados, setDatosValidados] = useState(false);
 
   const formatoPrecio = (precio) =>
     Number(precio).toLocaleString("es-AR", {
@@ -31,43 +30,87 @@ function Checkout() {
       [name]: value,
     }));
 
+    setErrores((anterior) => ({
+      ...anterior,
+      [name]: "",
+    }));
+
+    setErrorGeneral("");
     setDatosValidados(false);
   };
 
- 
-const handleSubmit = (e) => {
-  e.preventDefault();
+  const validarFormulario = () => {
+    const nuevosErrores = {};
 
-  setError("");
-  setDatosValidados(false);
+    const nombre = cliente.name.trim();
+    const email = cliente.email.trim();
+    const telefono = cliente.phone.trim();
 
-  if (carrito.length === 0) {
-    setError("No podés continuar con el carrito vacío.");
-    return;
-  }
+    if (!nombre) {
+      nuevosErrores.name = "Ingresá tu nombre completo.";
+    } else if (nombre.length < 3) {
+      nuevosErrores.name =
+        "El nombre debe tener al menos 3 caracteres.";
+    }
 
-  const stockInsuficiente = carrito.some(
-    (producto) =>
-      producto.stock <= 0 ||
-      producto.cantidad > producto.stock ||
-      producto.cantidad < 1
-  );
+    if (!email) {
+      nuevosErrores.email = "Ingresá tu correo electrónico.";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      nuevosErrores.email =
+        "Ingresá un correo electrónico válido.";
+    }
 
-  if (stockInsuficiente) {
-    setError(
-      "Uno o más productos no tienen stock suficiente."
+    if (telefono) {
+      const digitos = telefono.replace(/\D/g, "");
+      const caracteresValidos = /^[+\d\s()-]+$/.test(telefono);
+
+      if (
+        !caracteresValidos ||
+        digitos.length < 7 ||
+        digitos.length > 15
+      ) {
+        nuevosErrores.phone =
+          "Ingresá un teléfono válido de 7 a 15 dígitos.";
+      }
+    }
+
+    setErrores(nuevosErrores);
+
+    return Object.keys(nuevosErrores).length === 0;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    setErrorGeneral("");
+    setDatosValidados(false);
+
+    if (carrito.length === 0) {
+      setErrorGeneral(
+        "No podés continuar con el carrito vacío."
+      );
+      return;
+    }
+
+    const stockInsuficiente = carrito.some(
+      (producto) =>
+        producto.stock <= 0 ||
+        producto.cantidad > producto.stock ||
+        producto.cantidad < 1
     );
-    return;
-  }
 
-  if (!cliente.name.trim() || !cliente.email.trim()) {
-    setError("Completá los datos obligatorios.");
-    return;
-  }
+    if (stockInsuficiente) {
+      setErrorGeneral(
+        "Uno o más productos no tienen stock suficiente."
+      );
+      return;
+    }
 
-  // Todavía no enviamos el pedido a Backend.
-  setDatosValidados(true);
-};
+    if (!validarFormulario()) return;
+
+    // Simulación: no se envía el pedido al Backend.
+    setDatosValidados(true);
+  };
 
   return (
     <section className="checkout">
@@ -81,9 +124,7 @@ const handleSubmit = (e) => {
       {carrito.length === 0 ? (
         <div>
           <p>Tu carrito está vacío.</p>
-          <Link to="/productos">
-            Volver al catálogo
-          </Link>
+          <Link to="/productos">Volver al catálogo</Link>
         </div>
       ) : (
         <>
@@ -95,7 +136,6 @@ const handleSubmit = (e) => {
                 {producto.nombre} — Cantidad:{" "}
                 {producto.cantidad}
               </p>
-
               <p>
                 Subtotal estimado:{" "}
                 {formatoPrecio(
@@ -110,16 +150,17 @@ const handleSubmit = (e) => {
           </h3>
 
           <p>
-            Backend validará los precios y el stock
-            al confirmar el pedido.
+            Los precios y el stock deberán ser
+            validados por el Backend antes de
+            realizar pedidos reales.
           </p>
 
           <h3>Datos del cliente</h3>
 
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} noValidate>
             <div>
               <label htmlFor="name">
-                Nombre completo
+                Nombre completo *
               </label>
 
               <input
@@ -128,14 +169,29 @@ const handleSubmit = (e) => {
                 type="text"
                 value={cliente.name}
                 onChange={handleChange}
+                placeholder="Ej.: Ana Pérez"
                 autoComplete="name"
                 required
+                aria-invalid={Boolean(errores.name)}
+                aria-describedby={
+                  errores.name ? "name-error" : undefined
+                }
               />
+
+              {errores.name && (
+                <p
+                  id="name-error"
+                  className="mensaje-error"
+                  role="alert"
+                >
+                  {errores.name}
+                </p>
+              )}
             </div>
 
             <div>
               <label htmlFor="email">
-                Correo electrónico
+                Correo electrónico *
               </label>
 
               <input
@@ -144,9 +200,24 @@ const handleSubmit = (e) => {
                 type="email"
                 value={cliente.email}
                 onChange={handleChange}
+                placeholder="ejemplo@correo.com"
                 autoComplete="email"
                 required
+                aria-invalid={Boolean(errores.email)}
+                aria-describedby={
+                  errores.email ? "email-error" : undefined
+                }
               />
+
+              {errores.email && (
+                <p
+                  id="email-error"
+                  className="mensaje-error"
+                  role="alert"
+                >
+                  {errores.email}
+                </p>
+              )}
             </div>
 
             <div>
@@ -160,24 +231,43 @@ const handleSubmit = (e) => {
                 type="tel"
                 value={cliente.phone}
                 onChange={handleChange}
+                placeholder="Ej.: 11 1234-5678"
                 autoComplete="tel"
+                aria-invalid={Boolean(errores.phone)}
+                aria-describedby={
+                  errores.phone ? "phone-error" : undefined
+                }
               />
+
+              {errores.phone && (
+                <p
+                  id="phone-error"
+                  className="mensaje-error"
+                  role="alert"
+                >
+                  {errores.phone}
+                </p>
+              )}
             </div>
+
+            <p>* Campos obligatorios</p>
 
             <button type="submit">
               Validar datos
             </button>
           </form>
 
-{error && (
-  <p role="alert" className="mensaje-error">
-    {error}
-  </p>
-)}
+          {errorGeneral && (
+            <p role="alert" className="mensaje-error">
+              {errorGeneral}
+            </p>
+          )}
+
           {datosValidados && (
             <p role="status">
-              Datos completos. El pedido todavía
-              no fue enviado a Backend.
+              ✅ Datos validados correctamente.
+              El pedido todavía no fue enviado
+              al Backend.
             </p>
           )}
 
