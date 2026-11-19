@@ -3,10 +3,12 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { productosDemo } from "../data/productosDemo";
 import { useCart } from "../context/useCart";
+
 import {
   obtenerProductoPorId,
   obtenerCategorias,
 } from "../services/productosService";
+
 import { adaptarProducto } from "../services/productosAdapter";
 
 const USAR_API = import.meta.env.VITE_USAR_API === "true";
@@ -99,6 +101,8 @@ function DetalleProducto() {
     );
   }
 
+  const disponible = Number(producto.stock) > 0;
+
   const precioFormateado = Number(
     producto.precio
   ).toLocaleString("es-AR", {
@@ -108,31 +112,62 @@ function DetalleProducto() {
 
   return (
     <section className="detalle-producto">
-      <Link to="/productos">← Volver al catálogo</Link>
+      <Link to="/productos" className="volver-catalogo">
+        ← Volver al catálogo
+      </Link>
 
       <h2>{producto.nombre}</h2>
+<div className="detalle-producto-visual">
+  {producto.imagen ? (
+    <img
+      src={producto.imagen}
+      alt={producto.nombre}
+      className="detalle-producto-imagen"
+    />
+  ) : (
+    <div
+      className="detalle-producto-placeholder"
+      role="img"
+      aria-label={`Imagen de ${producto.nombre} pendiente`}
+    >
+      <span aria-hidden="true">📦</span>
+      <p>Imagen próximamente</p>
+    </div>
+  )}
+</div>
 
-      <p>{producto.descripcion}</p>
+      {producto.descripcion && (
+        <p>{producto.descripcion}</p>
+      )}
 
       <p>
         <strong>Categoría:</strong> {producto.categoria}
       </p>
 
-      <p>
-        <strong>Precio:</strong> {precioFormateado}
+      <p className="detalle-producto-precio">
+        <strong>{precioFormateado}</strong>
       </p>
 
-      <p>
-        <strong>Disponibilidad:</strong>{" "}
-        {producto.stock > 0 ? "Disponible" : "Sin stock"}
+      <p
+        className={
+          disponible
+            ? "producto-disponible"
+            : "producto-sin-stock"
+        }
+      >
+        {disponible
+          ? "Disponible"
+          : "Sin stock"}
       </p>
 
       <button
         type="button"
-        disabled={producto.stock <= 0}
+        className="detalle-producto-boton"
+        disabled={!disponible}
         onClick={() => agregarProducto(producto)}
+        aria-label={`Agregar ${producto.nombre} al carro`}
       >
-        Agregar al carrito
+        Agregar al carro
       </button>
     </section>
   );

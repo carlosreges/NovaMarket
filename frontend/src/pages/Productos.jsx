@@ -1,5 +1,7 @@
 
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+
 import ProductCard from "../components/ProductCard";
 import { productosDemo } from "../data/productosDemo";
 import { useCart } from "../context/useCart";
@@ -9,34 +11,37 @@ import {
   obtenerCategorias,
 } from "../services/productosService";
 
-import {
-  adaptarProductos,
-} from "../services/productosAdapter";
+import { adaptarProductos } from "../services/productosAdapter";
 
-// La API queda desactivada hasta que Backend esté disponible.
+// API desactivada hasta que Backend esté disponible.
 const USAR_API = import.meta.env.VITE_USAR_API === "true";
 
 function Productos() {
   const { agregarProducto } = useCart();
 
+  // Leer la categoría seleccionada desde Home.
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const categoria = searchParams.get("categoria") || "Todas";
+
   const [productos, setProductos] = useState(
     USAR_API ? [] : productosDemo
   );
 
-  const [categoria, setCategoria] = useState("Todas");
   const [busqueda, setBusqueda] = useState("");
 
   const [categorias, setCategorias] = useState([
     "Todas",
-    "Periféricos",
-    "Accesorios",
-    "Gadgets",
+    ...new Set(
+      productosDemo.map((producto) => producto.categoria)
+        .filter(Boolean)
+    ),
   ]);
 
   const [cargando, setCargando] = useState(USAR_API);
   const [error, setError] = useState("");
 
-  // Preparado para cargar productos reales desde Backend.
+  // Cargar catálogo real cuando Backend esté disponible.
   useEffect(() => {
     if (!USAR_API) return;
 
@@ -92,7 +97,28 @@ function Productos() {
     };
   }, []);
 
-  // Buscador y filtros.
+  // Cambiar la categoría y actualizar la URL.
+  const cambiarCategoria = (nuevaCategoria) => {
+    setSearchParams((anteriores) => {
+      const parametros = new URLSearchParams(anteriores);
+
+      if (nuevaCategoria === "Todas") {
+        parametros.delete("categoria");
+      } else {
+        parametros.set("categoria", nuevaCategoria);
+      }
+
+      return parametros;
+    });
+  };
+
+  // Incluir la categoría recibida desde Home
+  // aunque todavía no tenga productos de demostración.
+  const opcionesCategoria = [
+    ...new Set(["Todas", ...categorias, categoria]),
+  ];
+
+  // Filtrar por categoría y búsqueda.
   const productosFiltrados = productos.filter((producto) => {
     const coincideCategoria =
       categoria === "Todas" ||
@@ -114,7 +140,7 @@ function Productos() {
       <h2>Catálogo de productos</h2>
 
       <p>
-        Explorá nuestros accesorios, periféricos y gadgets.
+        Explorá productos para trabajar, estudiar y disfrutar.
       </p>
 
       <div className="buscador">
@@ -125,7 +151,7 @@ function Productos() {
         <input
           id="buscar-producto"
           type="search"
-          placeholder="Ej.: teclado, mouse..."
+          placeholder="¿Qué producto estás buscando?"
           value={busqueda}
           onChange={(e) => setBusqueda(e.target.value)}
         />
@@ -139,9 +165,9 @@ function Productos() {
         <select
           id="categoria"
           value={categoria}
-          onChange={(e) => setCategoria(e.target.value)}
+          onChange={(e) => cambiarCategoria(e.target.value)}
         >
-          {categorias.map((cat) => (
+          {opcionesCategoria.map((cat) => (
             <option key={cat} value={cat}>
               {cat}
             </option>
@@ -156,7 +182,7 @@ function Productos() {
           Error: {error}
         </p>
       ) : productosFiltrados.length === 0 ? (
-        <p className="sin-resultados">
+        <p className="sin-resultados" role="status">
           No se encontraron productos con los filtros
           seleccionados.
         </p>
