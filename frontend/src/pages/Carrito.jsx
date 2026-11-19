@@ -21,51 +21,142 @@ function Carrito() {
       <h2>Mi carrito de compras</h2>
 
       {carrito.length === 0 ? (
-        <div>
-          <p>Tu carrito está vacío.</p>
-          <Link to="/productos">Explorar productos</Link>
+        <div className="carrito-vacio">
+          <h3>Tu carrito está vacío</h3>
+          <p>
+            Explorá nuestros productos y encontrá
+            lo que necesitás.
+          </p>
+
+          <Link to="/productos" className="carrito-boton">
+            Explorar productos
+          </Link>
         </div>
       ) : (
-        <>
-          {carrito.map((item) => (
-            <article key={item.id} className="carrito-item">
-              <h3>{item.nombre}</h3>
+        <div className="carrito-contenido">
+          <div className="carrito-productos">
+            {carrito.map((item) => {
+              const cantidad = Number(item.cantidad) || 1;
+              const stock = Number(item.stock);
 
-              <p>Precio: {formatoPrecio(item.precio)}</p>
+              return (
+                <article
+                  key={item.id}
+                  className="carrito-item"
+                >
+                  {item.imagen && (
+                    <img
+                      src={item.imagen}
+                      alt={item.nombre}
+                      className="carrito-imagen"
+                    />
+                  )}
 
-              <label htmlFor={`cantidad-${item.id}`}>
-                Cantidad:
-              </label>
+                  <div className="carrito-item-info">
+                    <h3>{item.nombre}</h3>
 
-              <input
-                id={`cantidad-${item.id}`}
-                type="number"
-                min="1"
-                max={item.stock}
-                value={item.cantidad}
-                onChange={(e) =>
-                  actualizarCantidad(item.id, e.target.value)
-                }
-              />
+                    <p>
+                      Precio: {formatoPrecio(item.precio)}
+                    </p>
 
-              <p>
-                Subtotal:{" "}
-                {formatoPrecio(item.precio * item.cantidad)}
-              </p>
+                    <div className="carrito-cantidad">
+                      <label htmlFor={`cantidad-${item.id}`}>
+                        Cantidad:
+                      </label>
 
-              <button
-                type="button"
-                onClick={() => eliminarProducto(item.id)}
-              >
-                Eliminar
-              </button>
-            </article>
-          ))}
+                      <div className="cantidad-controles">
+                        <button
+                          type="button"
+                          disabled={cantidad <= 1}
+                          aria-label={`Disminuir cantidad de ${item.nombre}`}
+                          onClick={() =>
+                            actualizarCantidad(
+                              item.id,
+                              cantidad - 1
+                            )
+                          }
+                        >
+                          −
+                        </button>
 
-          <h3>Total: {formatoPrecio(total)}</h3>
+                        <input
+                          id={`cantidad-${item.id}`}
+                          type="number"
+                          min="1"
+                          max={item.stock}
+                          value={item.cantidad}
+                          onChange={(e) =>
+                            actualizarCantidad(
+                              item.id,
+                              e.target.value
+                            )
+                          }
+                        />
 
-          <Link to="/checkout">Continuar al checkout</Link>
-        </>
+                        <button
+                          type="button"
+                          disabled={
+                            Number.isFinite(stock) &&
+                            cantidad >= stock
+                          }
+                          aria-label={`Aumentar cantidad de ${item.nombre}`}
+                          onClick={() =>
+                            actualizarCantidad(
+                              item.id,
+                              cantidad + 1
+                            )
+                          }
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+
+                    <p className="carrito-subtotal">
+                      Subtotal:{" "}
+                      {formatoPrecio(
+                        item.precio * cantidad
+                      )}
+                    </p>
+
+                    <button
+                      type="button"
+                      className="carrito-eliminar"
+                      onClick={() =>
+                        eliminarProducto(item.id)
+                      }
+                    >
+                      Eliminar producto
+                    </button>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+
+          <aside className="carrito-resumen">
+            <h3>Resumen de compra</h3>
+
+            <div className="carrito-total">
+              <span>Total</span>
+              <strong>{formatoPrecio(total)}</strong>
+            </div>
+
+            <Link
+              to="/checkout"
+              className="carrito-boton"
+            >
+              Continuar al checkout
+            </Link>
+
+            <Link
+              to="/productos"
+              className="carrito-seguir"
+            >
+              Seguir explorando productos
+            </Link>
+          </aside>
+        </div>
       )}
     </section>
   );

@@ -3,7 +3,12 @@ import { Link } from "react-router-dom";
 
 function ProductCard({ producto, onAgregarCarrito }) {
   const precio = Number(producto.precio);
-  const disponible = producto.stock > 0;
+  const disponible = Number(producto.stock) > 0;
+
+  const precioFormateado = precio.toLocaleString("es-AR", {
+    style: "currency",
+    currency: "ARS",
+  });
 
   return (
     <article className="product-card">
@@ -11,23 +16,27 @@ function ProductCard({ producto, onAgregarCarrito }) {
         <img
           src={producto.imagen}
           alt={producto.nombre}
+          loading="lazy"
         />
       )}
 
       <h3>{producto.nombre}</h3>
 
-      <p>{producto.descripcion}</p>
+      {producto.descripcion && (
+        <p>{producto.descripcion}</p>
+      )}
 
-      <p>
-        <strong>
-          {precio.toLocaleString("es-AR", {
-            style: "currency",
-            currency: "ARS",
-          })}
-        </strong>
+      <p className="product-card-precio">
+        <strong>{precioFormateado}</strong>
       </p>
 
-      <p>
+      <p
+        className={
+          disponible
+            ? "producto-disponible"
+            : "producto-sin-stock"
+        }
+      >
         {disponible ? "Disponible" : "Sin stock"}
       </p>
 
@@ -36,15 +45,16 @@ function ProductCard({ producto, onAgregarCarrito }) {
           to={`/productos/${producto.id}`}
           className="ver-detalle"
         >
-          Ver detalle
+          Ver detalles
         </Link>
 
         <button
           type="button"
           disabled={!disponible}
           onClick={() => onAgregarCarrito?.(producto)}
+          aria-label={`Agregar ${producto.nombre} al carro`}
         >
-          Agregar al carrito
+          Agregar al carro
         </button>
       </div>
     </article>

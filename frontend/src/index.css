@@ -1,5 +1,16 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap");
 
+:root {
+  --color-primario: #14213D;
+  --color-secundario: #2864F0;
+  --color-blanco: #FFFFFF;
+  --color-fondo: #F3F5F8;
+  --color-texto: #303846;
+  --color-exito: #16845B;
+}
+
+
+
 * {
   margin: 0;
   padding: 0;
@@ -324,4 +335,494 @@ header a:hover {
 
 .product-card:hover {
   box-shadow: 0 8px 24px rgba(17, 24, 39, 0.1);
+}
+
+/* NMKT-39 y NMKT-76: Layout y Footer */
+
+.site-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.site-main {
+  flex: 1;
+  width: 100%;
+}
+
+.site-footer {
+  background-color: #14213D;
+  color: #ffffff;
+  padding: 32px 24px 20px;
+}
+
+.site-footer__content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.site-footer__brand {
+  font-size: 20px;
+}
+
+.site-footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.site-footer__links a,
+.site-footer__content p,
+.site-footer__legal {
+  color: #ffffff;
+}
+
+.site-footer__legal {
+  max-width: 1200px;
+  margin: 24px auto 0;
+  padding-top: 16px;
+  border-top: 1px solid #ffffff40;
+}
+
+@media (max-width: 600px) {
+  .site-footer__content {
+    flex-direction: column;
+  }
+}
+
+
+/* =================================
+   NOVAMARKET - COLORES DEL PROYECTO
+================================= */
+
+:root {
+  --color-primario: #14213D;
+  --color-secundario: #2864F0;
+  --color-blanco: #FFFFFF;
+  --color-fondo: #F3F5F8;
+  --color-texto: #303846;
+  --color-exito: #16845B;
+}
+
+/* HOME - BANNER PRINCIPAL */
+
+.home {
+  background: linear-gradient(
+    135deg,
+    var(--color-primario),
+    var(--color-secundario)
+  );
+  color: var(--color-blanco);
+}
+
+.home h1,
+.home p {
+  color: var(--color-blanco);
+}
+
+/* BOTÓN PRINCIPAL */
+
+.home-boton {
+  background-color: var(--color-blanco);
+  color: var(--color-primario);
+  transition: background-color 0.3s ease;
+}
+
+.home-boton:hover {
+  background-color: var(--color-fondo);
+}
+
+.home-boton:focus-visible {
+  outline: 3px solid var(--color-blanco);
+  outline-offset: 3px;
+}
+
+
+/* CATEGORÍAS DE HOME */
+
+.categorias-home {
+  max-width: 1152px;
+  margin: 0 auto;
+  padding: 32px 16px;
+}
+
+.categorias-home h2 {
+  color: var(--color-primario);
+  margin-bottom: 24px;
+  font-size: 26px;
+}
+
+.categorias-home__lista {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.categoria-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 110px;
+  padding: 16px;
+  border-radius: 14px;
+  background: var(--color-blanco);
+  border: 1px solid #dce3ed;
+  color: var(--color-primario);
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.categoria-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--color-secundario);
+}
+
+.categoria-card:focus-visible {
+  outline: 3px solid var(--color-secundario);
+  outline-offset: 3px;
+}
+
+/* CARRUSEL HORIZONTAL EN CELULAR */
+
+@media (max-width: 768px) {
+  .categorias-home__lista {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 12px;
+  }
+
+  .categoria-card {
+    flex: 0 0 160px;
+    scroll-snap-align: start;
+  }
+}
+
+/* ESTADOS DE PRODUCTOS */
+
+.producto-disponible {
+  color: #16845B;
+  font-weight: 600;
+}
+
+.producto-sin-stock {
+  color: #B42318;
+  font-weight: 600;
+}
+
+/* PRECIO */
+
+.product-card-precio {
+  color: #14213D;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+/* ACCESIBILIDAD */
+
+.product-card-actions button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+
+/* DETALLE DE PRODUCTO - NOVAMARKET */
+
+.detalle-producto {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 24px;
+  color: var(--color-texto);
+}
+
+.detalle-producto h2 {
+  color: var(--color-primario);
+  margin: 24px 0;
+}
+
+.volver-catalogo {
+  color: var(--color-secundario);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.volver-catalogo:hover {
+  text-decoration: underline;
+}
+
+.detalle-producto-imagen {
+  display: block;
+  max-width: 360px;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  margin: 24px 0;
+  border-radius: 12px;
+}
+
+.detalle-producto-precio {
+  font-size: 1.8rem;
+  color: var(--color-primario);
+  margin: 20px 0;
+}
+
+.detalle-producto-boton {
+  background: var(--color-secundario);
+  color: #ffffff;
+  padding: 14px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  margin-top: 16px;
+}
+
+.detalle-producto-boton:hover:not(:disabled) {
+  background: var(--color-primario);
+}
+
+.detalle-producto-boton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.detalle-producto-boton:focus-visible,
+.volver-catalogo:focus-visible {
+  outline: 3px solid var(--color-secundario);
+  outline-offset: 3px;
+}
+
+@media (max-width: 768px) {
+  .detalle-producto {
+    margin: 16px auto;
+    padding: 16px;
+  }
+
+  .detalle-producto-boton {
+    width: 100%;
+  }
+}
+
+/* NOVAMARKET - CARRITO */
+
+.carrito {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 24px;
+  color: var(--color-texto);
+}
+
+.carrito h2 {
+  color: var(--color-primario);
+  margin-bottom: 28px;
+}
+
+.carrito-contenido {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.carrito-productos {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.carrito-item {
+  background: #ffffff;
+  border: 1px solid #dce3ed;
+  border-radius: 14px;
+  padding: 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.carrito-imagen {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  border-radius: 10px;
+  background: #f3f5f8;
+}
+
+.carrito-item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.carrito-item h3 {
+  color: var(--color-primario);
+  margin-bottom: 12px;
+}
+
+.carrito-cantidad {
+  margin: 16px 0;
+}
+
+.cantidad-controles {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.cantidad-controles button {
+  width: 36px;
+  height: 36px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #14213d;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.cantidad-controles button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.cantidad-controles input {
+  width: 65px;
+  height: 36px;
+  text-align: center;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+}
+
+.carrito-subtotal {
+  font-weight: 700;
+  color: var(--color-primario);
+}
+
+.carrito-eliminar {
+  margin-top: 12px;
+  background: transparent;
+  border: none;
+  color: #b42318;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.carrito-resumen,
+.carrito-vacio {
+  background: #ffffff;
+  border: 1px solid #dce3ed;
+  border-radius: 14px;
+  padding: 24px;
+}
+
+.carrito-resumen h3 {
+  margin-bottom: 24px;
+  color: var(--color-primario);
+}
+
+.carrito-total {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 0;
+  margin-bottom: 20px;
+  border-top: 1px solid #dce3ed;
+  font-size: 20px;
+}
+
+.carrito-boton {
+  display: block;
+  padding: 14px 20px;
+  background: var(--color-secundario);
+  color: #ffffff;
+  border-radius: 8px;
+  text-decoration: none;
+  text-align: center;
+  font-weight: 600;
+}
+
+.carrito-boton:hover {
+  background: var(--color-primario);
+}
+
+.carrito-seguir {
+  display: block;
+  text-align: center;
+  margin-top: 18px;
+  color: var(--color-secundario);
+}
+
+.carrito-vacio {
+  text-align: center;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.carrito-vacio p {
+  margin: 16px 0 24px;
+}
+
+.carrito button:focus-visible,
+.carrito a:focus-visible,
+.carrito input:focus-visible {
+  outline: 3px solid var(--color-secundario);
+  outline-offset: 3px;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 768px) {
+  .carrito {
+    padding: 24px 16px;
+  }
+
+  .carrito-contenido {
+    grid-template-columns: 1fr;
+  }
+
+  .carrito-item {
+    flex-direction: column;
+  }
+
+  .carrito-imagen {
+    width: 100%;
+    height: 180px;
+  }
+}
+/* Imagen o placeholder del producto */
+.detalle-producto-visual {
+  width: 100%;
+  max-width: 420px;
+  margin: 24px 0;
+}
+.detalle-producto-visual .detalle-producto-imagen {
+  width: 100%;
+  max-width: none;
+  height: 300px;
+  object-fit: contain;
+  margin: 0;
+}
+.detalle-producto-placeholder {
+  min-height: 300px;
+  background: #f3f5f8;
+  border: 1px solid #dce3ed;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  color: #303846;
+}
+.detalle-producto-placeholder span {
+  font-size: 64px;
+}
+.detalle-producto-placeholder p {
+  font-weight: 600;
 }
