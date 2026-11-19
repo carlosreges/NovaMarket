@@ -1,0 +1,26 @@
+info:
+  name: 7 - Checkout
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{baseUrl}}/api/checkout"
+  body:
+    type: json
+    data: |-
+      {
+        "items": [
+          { "product_id": 1, "quantity": 3, "price": 15.99 }
+        ],
+        "total": 47.97
+      }
+  auth:
+    type: bearer
+    token: "{{token}}"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

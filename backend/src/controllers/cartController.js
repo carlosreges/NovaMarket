@@ -50,7 +50,7 @@ const cartController = {
   async updateItem(req, res) {
     try {
       const userId = req.user.id;
-      const { productId } = req.params;
+      const { id: productId } = req.params;
       const { quantity } = req.body;
 
       if (!quantity || quantity < 1) {
@@ -65,7 +65,7 @@ const cartController = {
 
       res.json({ success: true, message: 'Carrito actualizado', data: { item } });
     } catch (err) {
-      console.error('Error al actualizar carrito:', err.message);
+      console.error('Error al actualizar carrito:', err.message, err.stack);
       res.status(500).json({ success: false, message: 'Error al actualizar carrito' });
     }
   },
@@ -77,7 +77,7 @@ const cartController = {
   async removeItem(req, res) {
     try {
       const userId = req.user.id;
-      const { productId } = req.params;
+      const { id: productId } = req.params;
 
       const cart = await cartModel.getOrCreateActiveCart(userId);
       const item = await cartModel.removeItem(cart.id, parseInt(productId));

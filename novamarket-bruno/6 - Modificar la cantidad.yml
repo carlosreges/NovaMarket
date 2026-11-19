@@ -1,0 +1,23 @@
+info:
+  name: 6 - Modificar la cantidad
+  type: http
+  seq: 1
+
+http:
+  method: PUT
+  url: "{{baseUrl}}/api/cart/items/1"
+  body:
+    type: json
+    data: |-
+      {
+        "quantity": 3
+      }
+  auth:
+    type: bearer
+    token: "{{token}}"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -1,0 +1,8 @@
+name: local
+variables:
+  - name: baseUrl
+    value: http://localhost:3000
+  - name: token
+    value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJjbGllbnRlQG5vdmFtYXJrZXQuY29tIiwicm9sZSI6ImN1c3RvbWVyIiwiaWF0IjoxNzk1MDk5NjQwLCJleHAiOjE3OTU3MDQ0NDB9.n2YXc913dJZ43XjDHSnsoJdIqxXIIh3cae5GmJZYoGo
+  - name: tokenAdmin
+    value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhZG1pbkBub3ZhbWFya2V0LmNvbSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc5NTEwMjU5NSwiZXhwIjoxNzk1NzA3Mzk1fQ.fahj8MtxqukgsG1F-Iylu5fHfTkbBnLuCSk5MYcPYHc
