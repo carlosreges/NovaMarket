@@ -26,12 +26,17 @@ function Productos() {
   const [categoria, setCategoria] = useState("Todas");
   const [busqueda, setBusqueda] = useState("");
 
-  const [categorias, setCategorias] = useState([
-    "Todas",
-    "Periféricos",
-    "Accesorios",
-    "Gadgets",
-  ]);
+
+const [categorias, setCategorias] = useState(() =>
+  USAR_API
+    ? ["Todas"]
+    : [
+        "Todas",
+        ...new Set(
+          productosDemo.map((producto) => producto.categoria)
+        ),
+      ]
+);
 
   const [cargando, setCargando] = useState(USAR_API);
   const [error, setError] = useState("");
