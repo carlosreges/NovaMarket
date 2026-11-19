@@ -12,7 +12,7 @@ export function adaptarProducto(producto, categorias = []) {
     categoriaId: producto.category_id,
     precio: Number(producto.price),
     stock: Number(producto.stock),
-    imagen: "",
+imagen: producto.image_url || "",
     color: producto.color || "",
     marca: producto.brand || "",
   };

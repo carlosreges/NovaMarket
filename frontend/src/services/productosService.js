@@ -2,31 +2,47 @@
 import { apiRequest } from "./api";
 
 // Obtener productos del catálogo
-export async function obtenerProductos({
-  categoryId,
-  page = 1,
-  limit = 20,
-} = {}) {
-  const params = new URLSearchParams({
-    page: String(page),
-    limit: String(limit),
-  });
+export async function obtenerProductos({ categoryId } = {}) {
+  const params = new URLSearchParams();
 
-  if (categoryId) {
-    params.set("category_id", categoryId);
+  if (categoryId != null && categoryId !== "") {
+    params.set("category", String(categoryId));
   }
 
-  return apiRequest(`/api/products?${params.toString()}`);
+  const query = params.toString();
+  const endpoint = `/api/products${query ? `?${query}` : ""}`;
+
+  const respuesta = await apiRequest(endpoint);
+
+  if (!Array.isArray(respuesta?.data?.products)) {
+    throw new Error("Formato de productos incorrecto");
+  }
+
+  return {
+    items: respuesta.data.products,
+  };
 }
 
 // Obtener categorías
 export async function obtenerCategorias() {
-  return apiRequest("/api/categories");
+  const respuesta = await apiRequest("/api/categories");
+
+  if (!Array.isArray(respuesta?.data?.categories)) {
+    throw new Error("Formato de categorías incorrecto");
+  }
+
+  return respuesta.data.categories;
 }
 
-// Obtener el detalle de un producto
+ // Obtener detalle de un producto
 export async function obtenerProductoPorId(id) {
-  return apiRequest(
+  const respuesta = await apiRequest(
     `/api/products/${encodeURIComponent(id)}`
   );
+
+  if (!respuesta?.data?.product) {
+    throw new Error("No se pudo obtener el producto");
+  }
+
+  return respuesta.data.product;
 }
