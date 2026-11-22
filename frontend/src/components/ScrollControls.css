@@ -1,0 +1,70 @@
+/* NOVAMARKET - CONTROLES DE DESPLAZAMIENTO */
+
+.scroll-controls {
+    position: fixed;
+    right: 18px;
+    bottom: 100px;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.scroll-controls button {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border: 2px solid #ffffff;
+    border-radius: 14px;
+    background: #2864f0;
+    color: #ffffff;
+    font-size: 26px;
+    font-weight: 700;
+    box-shadow: 0 5px 16px rgba(20, 33, 61, 0.25);
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.scroll-controls button:hover {
+    background: #1749bd;
+    transform: translateY(-2px);
+}
+
+.scroll-controls button:active {
+    transform: translateY(0);
+}
+
+.scroll-controls button:focus-visible {
+    outline: 3px solid #14213d;
+    outline-offset: 3px;
+}
+
+
+/* TABLETS Y CELULARES */
+
+@media (max-width: 600px) {
+    .scroll-controls {
+        right: 10px;
+        bottom: 90px;
+        gap: 8px;
+    }
+    .scroll-controls button {
+        width: 44px;
+        height: 44px;
+        font-size: 24px;
+    }
+}
+
+
+/* ACCESIBILIDAD */
+
+@media (prefers-reduced-motion: reduce) {
+    .scroll-controls button {
+        transition: none;
+    }
+    .scroll-controls button:hover {
+        transform: none;
+    }
+}
