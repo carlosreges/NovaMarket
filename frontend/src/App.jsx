@@ -6,6 +6,7 @@ import DetalleProducto from "./pages/DetalleProducto";
 import Carrito from "./pages/Carrito";
 import Checkout from "./pages/Checkout";
 import ConfirmacionPedido from "./pages/ConfirmacionPedido";
+import Login from "./pages/Login";
 
 function App() {
   return (
@@ -17,7 +18,7 @@ function App() {
         <Route path="/carrito" element={<Carrito />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/confirmacion" element={<ConfirmacionPedido />} />
-        <Route path="/login" element={<h2>Iniciar sesión</h2>} />
+        <Route path="/login" element={<Login />} />
         <Route path="*" element={<h2>Página no encontrada</h2>} />
       </Route>
     </Routes>

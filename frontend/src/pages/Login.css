@@ -1,0 +1,144 @@
+.login-page {
+    min-height: 65vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 48px 20px;
+    background: #f4f6fb;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 440px;
+    padding: 36px;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    box-shadow: 0 12px 35px rgba(15, 23, 42, 0.09);
+    color: #17233b;
+}
+
+.login-card__encabezado {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.login-card__encabezado h1 {
+    font-size: 1.7rem;
+    margin: 0 0 10px;
+    color: #102447;
+}
+
+.login-card__encabezado p {
+    color: #64748b;
+    margin: 0;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.login-form label {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.login-form input {
+    width: 100%;
+    min-width: 0;
+    padding: 13px;
+    border: 1px solid #cbd5e1;
+    border-radius: 9px;
+    font: inherit;
+    background: white;
+    color: #17233b;
+}
+
+.login-form input:focus {
+    outline: 2px solid #2563eb;
+    outline-offset: 1px;
+}
+
+.login-password {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.login-password button {
+    padding: 10px;
+    background: transparent;
+    border: 0;
+    color: #175cd3;
+    cursor: pointer;
+}
+
+.login-submit {
+    margin-top: 12px;
+    width: 100%;
+    padding: 14px;
+    border: 0;
+    border-radius: 9px;
+    background: #1769e0;
+    color: white;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.login-submit:hover {
+    background: #1054b8;
+}
+
+.login-form button:focus-visible,
+.login-card__pie a:focus-visible {
+    outline: 3px solid #38bdf8;
+    outline-offset: 3px;
+}
+
+.login-mensaje {
+    padding: 12px;
+    border-radius: 8px;
+    background: #eff6ff;
+    color: #1e40af;
+    font-size: 0.9rem;
+}
+
+.login-card__pie {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-top: 26px;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.login-card__pie p {
+    margin: 0;
+    font-weight: 600;
+}
+
+.login-card__pie span {
+    color: #64748b;
+}
+
+.login-card__pie a {
+    color: #1769e0;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+@media (max-width: 480px) {
+    .login-page {
+        padding: 24px 12px;
+    }
+    .login-card {
+        padding: 24px 18px;
+    }
+    .login-card__encabezado h1 {
+        font-size: 1.4rem;
+    }
+}

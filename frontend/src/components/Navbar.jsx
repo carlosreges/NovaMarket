@@ -1,6 +1,6 @@
 
 import { Link } from "react-router-dom";
-import logoNovaMarket from "../assets/logo_horizontal_negativo.svg";
+import logoNovaMarket from "../assets/logo-novamarket.png";
 
 function Navbar() {
   return (

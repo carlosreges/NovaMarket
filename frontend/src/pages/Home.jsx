@@ -1,5 +1,6 @@
 
 import { Link } from "react-router-dom";
+import HeroCarousel from "../components/HeroCarousel";
 
 const categorias = [
   {
@@ -11,9 +12,9 @@ const categorias = [
     valor: "Periféricos",
   },
   {
-  nombre: "Escritorios y sillas",
-  valor: "Muebles",
-},
+    nombre: "Escritorios y sillas",
+    valor: "Muebles",
+  },
   {
     nombre: "Almacenamiento",
     valor: "Almacenamiento externo",
@@ -27,25 +28,7 @@ const categorias = [
 function Home() {
   return (
     <>
-      <section
-        className="home"
-        aria-labelledby="titulo-inicio"
-      >
-        <div className="home-contenido">
-          <h1 id="titulo-inicio">
-            Tu mundo tecnológico en un solo lugar
-          </h1>
-
-          <p>
-            Accesorios, periféricos y equipamiento de calidad
-            para trabajar, estudiar y disfrutar.
-          </p>
-
-          <Link to="/productos" className="home-boton">
-            Explorar productos
-          </Link>
-        </div>
-      </section>
+      <HeroCarousel />
 
       <section
         className="categorias-home"
