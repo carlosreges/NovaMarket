@@ -12,33 +12,42 @@ function ProductCard({ producto, onAgregarCarrito }) {
 
   return (
     <article className="product-card">
-      {producto.imagen && (
-        <img
-          src={producto.imagen}
-          alt={producto.nombre}
-          loading="lazy"
-        />
-      )}
+      <div className="product-card__imagen">
+        {producto.imagen ? (
+          <img
+            src={producto.imagen}
+            alt={producto.nombre}
+            loading="lazy"
+          />
+        ) : (
+          <div className="product-card__sin-imagen">
+            <span aria-hidden="true">▣</span>
+            <span>Imagen próximamente</span>
+          </div>
+        )}
+      </div>
 
-      <h3>{producto.nombre}</h3>
+      <div className="product-card__informacion">
+        <h3>{producto.nombre}</h3>
 
-      {producto.descripcion && (
-        <p>{producto.descripcion}</p>
-      )}
+        {producto.descripcion && (
+          <p>{producto.descripcion}</p>
+        )}
 
-      <p className="product-card-precio">
-        <strong>{precioFormateado}</strong>
-      </p>
+        <p className="product-card-precio">
+          <strong>{precioFormateado}</strong>
+        </p>
 
-      <p
-        className={
-          disponible
-            ? "producto-disponible"
-            : "producto-sin-stock"
-        }
-      >
-        {disponible ? "Disponible" : "Sin stock"}
-      </p>
+        <p
+          className={
+            disponible
+              ? "producto-disponible"
+              : "producto-sin-stock"
+          }
+        >
+          {disponible ? "Disponible" : "Sin stock"}
+        </p>
+      </div>
 
       <div className="product-card-actions">
         <Link
@@ -52,9 +61,9 @@ function ProductCard({ producto, onAgregarCarrito }) {
           type="button"
           disabled={!disponible}
           onClick={() => onAgregarCarrito?.(producto)}
-          aria-label={`Agregar ${producto.nombre} al carro`}
+          aria-label={`Agregar ${producto.nombre} al carrito`}
         >
-          Agregar al carro
+          Agregar al carrito
         </button>
       </div>
     </article>

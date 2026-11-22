@@ -1,6 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+
 import { productosDemo } from "../data/productosDemo";
 import { useCart } from "../context/useCart";
 
@@ -67,7 +68,7 @@ function DetalleProducto() {
   }, [id]);
 
   const productoDemo = productosDemo.find(
-    (item) => String(item.id) === id
+    (item) => String(item.id) === String(id)
   );
 
   const producto = USAR_API
@@ -78,15 +79,22 @@ function DetalleProducto() {
   const error = USAR_API ? estadoApi.error : "";
 
   if (cargando) {
-    return <p role="status">Cargando producto...</p>;
+    return (
+      <section className="detalle-producto">
+        <p role="status">Cargando producto...</p>
+      </section>
+    );
   }
 
   if (error) {
     return (
       <section className="detalle-producto">
-        <h2>Error al cargar el producto</h2>
+        <h1>Error al cargar el producto</h1>
         <p role="alert">{error}</p>
-        <Link to="/productos">Volver al catálogo</Link>
+
+        <Link to="/productos" className="volver-catalogo">
+          ← Volver al catálogo
+        </Link>
       </section>
     );
   }
@@ -94,9 +102,13 @@ function DetalleProducto() {
   if (!producto) {
     return (
       <section className="detalle-producto">
-        <h2>Producto no encontrado</h2>
+        <h1>Producto no encontrado</h1>
+
         <p>El producto solicitado no está disponible.</p>
-        <Link to="/productos">Volver al catálogo</Link>
+
+        <Link to="/productos" className="volver-catalogo">
+          ← Volver al catálogo
+        </Link>
       </section>
     );
   }
@@ -110,65 +122,93 @@ function DetalleProducto() {
     currency: "ARS",
   });
 
+  const agregarAlCarrito = () => {
+    if (!disponible) return;
+
+    agregarProducto(producto);
+  };
+
   return (
-    <section className="detalle-producto">
+    <section
+      className="detalle-producto"
+      aria-labelledby="detalle-titulo"
+    >
       <Link to="/productos" className="volver-catalogo">
         ← Volver al catálogo
       </Link>
 
-      <h2>{producto.nombre}</h2>
-<div className="detalle-producto-visual">
-  {producto.imagen ? (
-    <img
-      src={producto.imagen}
-      alt={producto.nombre}
-      className="detalle-producto-imagen"
-    />
-  ) : (
-    <div
-      className="detalle-producto-placeholder"
-      role="img"
-      aria-label={`Imagen de ${producto.nombre} pendiente`}
-    >
-      <span aria-hidden="true">📦</span>
-      <p>Imagen próximamente</p>
-    </div>
-  )}
-</div>
+      <div className="detalle-producto-card">
+        <div className="detalle-producto-visual">
+          {producto.imagen ? (
+            <img
+              src={producto.imagen}
+              alt={producto.nombre}
+              className="detalle-producto-imagen"
+            />
+          ) : (
+            <div
+              className="detalle-producto-placeholder"
+              role="img"
+              aria-label={`Imagen de ${producto.nombre} pendiente`}
+            >
+              <span aria-hidden="true">📦</span>
+              <p>Imagen próximamente</p>
+            </div>
+          )}
+        </div>
 
-      {producto.descripcion && (
-        <p>{producto.descripcion}</p>
-      )}
+        <div className="detalle-producto-info">
+          <span className="detalle-producto-categoria">
+            {producto.categoria || "Tecnología"}
+          </span>
 
-      <p>
-        <strong>Categoría:</strong> {producto.categoria}
-      </p>
+          <h1 id="detalle-titulo">{producto.nombre}</h1>
 
-      <p className="detalle-producto-precio">
-        <strong>{precioFormateado}</strong>
-      </p>
+          {producto.descripcion && (
+            <p className="detalle-producto-descripcion">
+              {producto.descripcion}
+            </p>
+          )}
 
-      <p
-        className={
-          disponible
-            ? "producto-disponible"
-            : "producto-sin-stock"
-        }
-      >
-        {disponible
-          ? "Disponible"
-          : "Sin stock"}
-      </p>
+          <p className="detalle-producto-precio">
+            <strong>{precioFormateado}</strong>
+          </p>
 
-      <button
-        type="button"
-        className="detalle-producto-boton"
-        disabled={!disponible}
-        onClick={() => agregarProducto(producto)}
-        aria-label={`Agregar ${producto.nombre} al carro`}
-      >
-        Agregar al carro
-      </button>
+          <p
+            className={
+              disponible
+                ? "producto-disponible"
+                : "producto-sin-stock"
+            }
+          >
+            {disponible ? "Disponible" : "Sin stock"}
+          </p>
+
+          <button
+            type="button"
+            className="detalle-producto-boton"
+            disabled={!disponible}
+            onClick={agregarAlCarrito}
+            aria-label={`Agregar ${producto.nombre} al carrito`}
+          >
+            {disponible
+              ? "Agregar al carrito"
+              : "Producto sin stock"}
+          </button>
+
+          <Link
+            to="/carrito"
+            className="detalle-producto-ver-carrito"
+          >
+            Ver mi carrito
+          </Link>
+
+          <p className="detalle-producto-demo">
+            Catálogo de demostración. No se procesan
+            compras reales.
+          </p>
+        </div>
+      </div>
     </section>
   );
 }

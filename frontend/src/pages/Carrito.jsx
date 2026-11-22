@@ -22,15 +22,28 @@ function Carrito() {
 
       {carrito.length === 0 ? (
         <div className="carrito-vacio">
+          <div
+            className="carrito-vacio__icono"
+            aria-hidden="true"
+          >
+            🛒
+          </div>
+
           <h3>Tu carrito está vacío</h3>
+
           <p>
-            Explorá nuestros productos y encontrá
+            Todavía no agregaste productos.
+            Explorá nuestro catálogo y encontrá
             lo que necesitás.
           </p>
 
           <Link to="/productos" className="carrito-boton">
             Explorar productos
           </Link>
+
+          <p className="carrito-vacio__nota">
+            Versión de demostración de NovaMarket.
+          </p>
         </div>
       ) : (
         <div className="carrito-contenido">
