@@ -1,14 +1,7 @@
 require('dotenv').config();
-const { Pool } = require('pg');
 const bcrypt = require('bcryptjs');
+const pool = require('../config/db');
 
-const pool = new Pool({
-  host: process.env.DB_HOST || 'localhost',
-  port: process.env.DB_PORT || 5432,
-  user: process.env.DB_USER || 'postgres',
-  password: process.env.DB_PASSWORD || 'postgres',
-  database: process.env.DB_NAME || 'novamarket',
-});
 
 async function seed() {
   const client = await pool.connect();

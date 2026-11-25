@@ -24,6 +24,17 @@ npm run dev
 
 El servidor levantará en `http://localhost:3000`
 
+### Base de datos
+
+El backend usa `DATABASE_URL` (PostgreSQL en Neon) si está definida en `.env`; si no, usa las variables `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD` y `DB_NAME` (por ejemplo, un contenedor Docker local).
+
+Copiar `.env.example` a `.env` y completar los valores:
+
+```bash
+cp .env.example .env
+# Editar .env con tus credenciales de PostgreSQL
+```
+
 ### 2. Frontend (React / Vite / HTML+CSS+JS)
 
 ```bash
