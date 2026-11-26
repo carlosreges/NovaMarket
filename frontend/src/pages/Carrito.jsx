@@ -1,6 +1,9 @@
 
+import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
+
 import { useCart } from "../context/useCart";
+import { registrarEvento } from "../services/trackingService";
 
 function Carrito() {
   const {
@@ -9,6 +12,27 @@ function Carrito() {
     eliminarProducto,
     total,
   } = useCart();
+
+  const vistaRegistrada = useRef(false);
+
+  // Registrar una visita al carrito por montaje.
+  // No volver a registrar por cambios de cantidad.
+  useEffect(() => {
+    if (vistaRegistrada.current) return;
+
+    vistaRegistrada.current = true;
+
+    registrarEvento("view_cart", {
+      items: carrito.map((producto) => ({
+        item_id: producto.codigo ?? String(producto.id),
+        item_name: producto.nombre,
+        price: Number(producto.precio),
+        quantity: Number(producto.cantidad),
+      })),
+      value: Number(total),
+      currency: "ARS",
+    });
+  }, [carrito, total]);
 
   const formatoPrecio = (precio) =>
     Number(precio).toLocaleString("es-AR", {
@@ -37,7 +61,10 @@ function Carrito() {
             lo que necesitás.
           </p>
 
-          <Link to="/productos" className="carrito-boton">
+          <Link
+            to="/productos"
+            className="carrito-boton"
+          >
             Explorar productos
           </Link>
 
@@ -62,6 +89,7 @@ function Carrito() {
                       src={item.imagen}
                       alt={item.nombre}
                       className="carrito-imagen"
+                      loading="lazy"
                     />
                   )}
 

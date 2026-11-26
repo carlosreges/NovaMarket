@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
 import { productosDemo } from "../data/productosDemo";
@@ -11,6 +11,7 @@ import {
 } from "../services/productosService";
 
 import { adaptarProducto } from "../services/productosAdapter";
+import { registrarEvento } from "../services/trackingService";
 
 const USAR_API = import.meta.env.VITE_USAR_API === "true";
 
@@ -18,12 +19,15 @@ function DetalleProducto() {
   const { id } = useParams();
   const { agregarProducto } = useCart();
 
+  const eventosRegistrados = useRef(new Set());
+
   const [estadoApi, setEstadoApi] = useState({
     id: null,
     producto: null,
     error: "",
   });
 
+  // Obtener el producto desde la API cuando esté habilitada.
   useEffect(() => {
     if (!USAR_API) return;
 
@@ -78,6 +82,27 @@ function DetalleProducto() {
   const cargando = USAR_API && estadoApi.id !== id;
   const error = USAR_API ? estadoApi.error : "";
 
+  // Tracking: registrar la visualización del producto.
+  useEffect(() => {
+    if (cargando || error || !producto) return;
+
+    const clave = `${id}:${producto.codigo ?? producto.id}`;
+
+    // Evita duplicados en el mismo montaje,
+    // incluso con efectos repetidos en desarrollo.
+    if (eventosRegistrados.current.has(clave)) return;
+
+    eventosRegistrados.current.add(clave);
+
+    registrarEvento("view_item", {
+      item_id: producto.codigo ?? String(producto.id),
+      item_name: producto.nombre,
+      price: Number(producto.precio),
+      item_category: producto.categoria ?? "",
+      currency: "ARS",
+    });
+  }, [id, producto, cargando, error]);
+
   if (cargando) {
     return (
       <section className="detalle-producto">
@@ -103,7 +128,6 @@ function DetalleProducto() {
     return (
       <section className="detalle-producto">
         <h1>Producto no encontrado</h1>
-
         <p>El producto solicitado no está disponible.</p>
 
         <Link to="/productos" className="volver-catalogo">

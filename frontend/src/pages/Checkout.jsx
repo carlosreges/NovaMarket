@@ -1,7 +1,8 @@
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "../context/useCart";
+import { registrarEvento } from "../services/trackingService";
 
 function Checkout() {
   const { carrito, total } = useCart();
@@ -15,6 +16,29 @@ function Checkout() {
   const [errores, setErrores] = useState({});
   const [errorGeneral, setErrorGeneral] = useState("");
   const [datosValidados, setDatosValidados] = useState(false);
+
+  const eventoRegistrado = useRef(false);
+
+  // Tracking: registrar el inicio del Checkout una sola vez
+  // por montaje del componente.
+  useEffect(() => {
+    if (eventoRegistrado.current || carrito.length === 0) {
+      return;
+    }
+
+    eventoRegistrado.current = true;
+
+    registrarEvento("begin_checkout", {
+      value: Number(total),
+      currency: "ARS",
+      items: carrito.map((producto) => ({
+        item_id: producto.codigo ?? String(producto.id),
+        item_name: producto.nombre,
+        price: Number(producto.precio),
+        quantity: Number(producto.cantidad),
+      })),
+    });
+  }, [carrito, total]);
 
   const formatoPrecio = (precio) =>
     Number(precio).toLocaleString("es-AR", {
@@ -75,7 +99,6 @@ function Checkout() {
     }
 
     setErrores(nuevosErrores);
-
     return Object.keys(nuevosErrores).length === 0;
   };
 
@@ -92,12 +115,18 @@ function Checkout() {
       return;
     }
 
-    const stockInsuficiente = carrito.some(
-      (producto) =>
-        producto.stock <= 0 ||
-        producto.cantidad > producto.stock ||
-        producto.cantidad < 1
-    );
+    const stockInsuficiente = carrito.some((producto) => {
+      const stock = Number(producto.stock);
+      const cantidad = Number(producto.cantidad);
+
+      return (
+        !Number.isFinite(stock) ||
+        !Number.isInteger(cantidad) ||
+        stock <= 0 ||
+        cantidad > stock ||
+        cantidad < 1
+      );
+    });
 
     if (stockInsuficiente) {
       setErrorGeneral(
@@ -108,7 +137,8 @@ function Checkout() {
 
     if (!validarFormulario()) return;
 
-    // Simulación: no se envía el pedido al Backend.
+    // Simulación: NO se envía el pedido al Backend.
+    // NO se registra el evento purchase.
     setDatosValidados(true);
   };
 
@@ -124,7 +154,9 @@ function Checkout() {
       {carrito.length === 0 ? (
         <div>
           <p>Tu carrito está vacío.</p>
-          <Link to="/productos">Volver al catálogo</Link>
+          <Link to="/productos">
+            Volver al catálogo
+          </Link>
         </div>
       ) : (
         <>
@@ -136,6 +168,7 @@ function Checkout() {
                 {producto.nombre} — Cantidad:{" "}
                 {producto.cantidad}
               </p>
+
               <p>
                 Subtotal estimado:{" "}
                 {formatoPrecio(
